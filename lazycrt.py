@@ -153,7 +153,7 @@ def main():
 
     if (args.output != None): print_arquivo(list_of_addr,args)
 
-#looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooool
+
 
 
 main()
