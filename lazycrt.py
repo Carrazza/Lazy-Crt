@@ -40,13 +40,15 @@ def print_logo():
 
 
 
-def crtsh(list_of_addr,args):
+def crtsh(args):
 
     #Gets the json response from crt.sh
     json_request = r.get("https://crt.sh/?q=%25."+args.domain+"&output=json")
 
     #Transforms the response in valid json to be interpreted by python
-    json_py = json.loads(json_request.text) 
+    json_py = json.loads(json_request.text)
+
+    crtsh_set = set()
 
     for dictionary in json_py:
         
@@ -57,18 +59,20 @@ def crtsh(list_of_addr,args):
         
         for addrs in addrs_list:
 
-            if addrs not in list_of_addr:
-                list_of_addr.add(addrs)
+            if addrs not in crtsh_set:
+                crtsh_set.add(addrs)
 
-    return list_of_addr
+    return crtsh_set
 
 
-def sublist3r(list_of_addr,args):
+def sublist3r(args):
 
     sublister = "/home/carrazza/Desktop/hack/Scripts/Sublist3r/sublist3r.py -d " + args.domain + " -o ./sublister.txt > /dev/null"
 
 
     os.system(sublister)
+
+    sublister_set = set()
 
     #Pegando os domínios do sublister 
     with open("sublister.txt","r") as f:
@@ -78,10 +82,18 @@ def sublist3r(list_of_addr,args):
             #quando pegamos o output do sublist3r ele vem com \n, vamos tirar eles
             result = result.replace('\n','')
 
-            if result not in list_of_addr:
-                list_of_addr.add(result)
+            if result not in sublister_set:
+                sublister_set.add(result)
     
-    return list_of_addr
+    return sublister_set
+
+
+
+def unir_resultados(crtsh_set,sublister_set):
+
+    return crtsh_set.union(sublister_set)
+
+
 
 
 def lista_final(list_of_addr):
@@ -122,11 +134,20 @@ def main():
     #list with all addr
     list_of_addr = set()
 
-    print(Fore.GREEN+"-> Pesquisando no crt.sh")
-    list_of_addr = crtsh(list_of_addr,args)
+    #achados do Crt.sh
+    print(Fore.GREEN+"[-] Pesquisando no crt.sh")
+    crtsh_set = crtsh(args)
 
-    print(Fore.GREEN+'-> Pesquisando no Sublist3r')
-    list_of_addr = sublist3r(list_of_addr,args)
+    #achados do Sublist3r
+    print(Fore.GREEN+'[-] Pesquisando no Sublist3r')
+    sublister_set = sublist3r(args)
+
+
+
+    #unindo tudo
+    list_of_addr = unir_resultados(crtsh_set,sublister_set)
+
+
 
     lista_final(list_of_addr)
 
