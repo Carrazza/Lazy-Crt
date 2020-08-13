@@ -4,9 +4,13 @@ import requests as r
 import json 
 import argparse
 import os
+import webbrowser
+
 import colorama
 from colorama import Fore, Back, Style
 colorama.init(autoreset=True)
+
+
 
 
 def create_parser():
@@ -120,6 +124,12 @@ def print_arquivo(list_of_addr,args):
         f.write(string)
 
 
+def sec_headers(args):
+
+   #Just open the tab lol
+   webbrowser.open_new("https://securityheaders.com/?q=hackoonspace.com&followRedirects=on$")
+
+
 def main():
 
     args = create_parser()
@@ -142,8 +152,6 @@ def main():
     print(Fore.GREEN+'[-] Pesquisando no Sublist3r')
     sublister_set = sublist3r(args)
 
-
-
     #unindo tudo
     list_of_addr = unir_resultados(crtsh_set,sublister_set)
 
@@ -152,6 +160,9 @@ def main():
     lista_final(list_of_addr)
 
     if (args.output != None): print_arquivo(list_of_addr,args)
+
+    sec_headers(args)
+
 
 #LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL
 
