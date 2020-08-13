@@ -82,7 +82,7 @@ def crtsh(args):
     finish = time.perf_counter()
 
 
-    if(args.verbosity != None): print(Fore.BLUE+ f"-> crt.sh demorou {round(finish-start,2)} segs")
+    if(args.verbosity == True): print(Fore.BLUE+ f"-> crt.sh demorou {round(finish-start,2)} segs")
 
     return crtsh_set
 
@@ -113,7 +113,7 @@ def sublist3r(args):
 
     finish = time.perf_counter()
 
-    if(args.verbosity != None):print(Fore.BLUE+ f"-> Sublist3r demorou {round(finish-start,2)} segs")
+    if(args.verbosity == True):print(Fore.BLUE+ f"-> Sublist3r demorou {round(finish-start,2)} segs")
 
     return sublister_set
 
@@ -136,6 +136,8 @@ def lista_final(list_of_addr):
     #printa a lista
     for addr in list_of_addr:
         print(Fore.YELLOW + Style.BRIGHT + addr,end="\n")
+
+    print(Fore.BLUE+ "-"*129, end="")
         
 
 
@@ -173,6 +175,12 @@ def main():
 
     print_logo()
 
+    #Se tiver o parãmetro pedindo pra n usar, don't
+    if(args.Headers == True):
+        print(Fore.GREEN + "[-] abrindo o scan no security headers")
+        #achados do Security Headers
+        sec_headers(args)
+
     #list with all addr
     list_of_addr = set()
 
@@ -193,14 +201,7 @@ def main():
 
     if (args.output != None): print_arquivo(list_of_addr,args)
 
-    #Se tiver o parãmetro pedindo pra n usar, don't
-    if(args.Headers != None):
-        print(Fore.BLUE+ "-"*129)
-        print(Fore.GREEN + "[-] abrindo o scan no security headers")
-        
-        
-        #achados do Security Headers
-        sec_headers(args)
+
 
 
     #performance time
@@ -209,8 +210,6 @@ def main():
     print(Fore.YELLOW + Style.BRIGHT + f"\nVocê esteve aqui por {round(finish-start,2)} segundos, Obrigado por usar lazycrt!")
 
     exit()
-
-#LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL
 
 
 main()
