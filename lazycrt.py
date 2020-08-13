@@ -25,8 +25,11 @@ def create_parser():
     #argumento de output 
     parser.add_argument("-o","--output",type=str,metavar=" ",required=False , help="Manda o output para um arquivo cujo nome vem depois do -o")
 
-    #no security headers
-    parser.add_argument("-H","--Headers",type=str,metavar=" ",required=False,help="y/n -> quer que abra o security headers?(por padrão ele abre)")
+    #argumento de security headers
+    parser.add_argument("-H","--Headers", action='store_true',required=False,help="y/n -> quer que abra o security headers?(por padrão ele não abre)")
+
+    #argumento verbosidade
+    parser.add_argument("-v","--verbosity",action='store_true', required=False,help="informações a mais sobre o script enquanto ele roda")
 
     return parser.parse_args()
 
@@ -52,6 +55,8 @@ def print_logo():
 
 def crtsh(args):
 
+    start = time.perf_counter()
+
     #Gets the json response from crt.sh
     json_request = r.get("https://crt.sh/?q=%25."+args.domain+"&output=json")
 
@@ -74,10 +79,18 @@ def crtsh(args):
             if addrs not in crtsh_set:
                 crtsh_set.add(addrs)
 
+    finish = time.perf_counter()
+
+
+    if(args.verbosity != None): print(Fore.BLUE+ f"-> crt.sh demorou {round(finish-start,2)} segs")
+
     return crtsh_set
 
 
 def sublist3r(args):
+
+    start = time.perf_counter()
+
 
     sublister = "/home/carrazza/Desktop/hack/Scripts/Sublist3r/sublist3r.py -d " + args.domain + " -o ./sublister.txt > /dev/null"
 
@@ -97,6 +110,11 @@ def sublist3r(args):
             if result not in sublister_set:
                 sublister_set.add(result)
     
+
+    finish = time.perf_counter()
+
+    if(args.verbosity != None):print(Fore.BLUE+ f"-> Sublist3r demorou {round(finish-start,2)} segs")
+
     return sublister_set
 
 
@@ -148,8 +166,6 @@ def main():
 
     args = create_parser()
 
-    print(args.Headers)
-
     #remove trequinhos desnecessários para fazer a request 
     args.domain = args.domain.replace("https://","")
     args.domain = args.domain.replace("www.","")
@@ -178,9 +194,12 @@ def main():
     if (args.output != None): print_arquivo(list_of_addr,args)
 
     #Se tiver o parãmetro pedindo pra n usar, don't
-    if(args.Headers != "n"):
+    if(args.Headers != None):
+        print(Fore.BLUE+ "-"*129)
+        print(Fore.GREEN + "[-] abrindo o scan no security headers")
+        
+        
         #achados do Security Headers
-        print("\n"+Fore.GREEN + "[-] abrindo o scan no security headers")
         sec_headers(args)
 
 
