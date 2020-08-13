@@ -5,6 +5,7 @@ import json
 import argparse
 import os
 import webbrowser
+import time
 
 import colorama
 from colorama import Fore, Back, Style
@@ -20,7 +21,12 @@ def create_parser():
 
     #argumento do domínio/link 
     parser.add_argument("-d","--domain",type=str ,metavar=" ", required=True, help="Domínio que vamos dar uma olhada")
+
+    #argumento de output 
     parser.add_argument("-o","--output",type=str,metavar=" ",required=False , help="Manda o output para um arquivo cujo nome vem depois do -o")
+
+    #no security headers
+    parser.add_argument("-H","--Headers",type=str,metavar=" ",required=False,help="y/n -> quer que abra o security headers?(por padrão ele abre)")
 
     return parser.parse_args()
 
@@ -53,6 +59,8 @@ def crtsh(args):
     json_py = json.loads(json_request.text)
 
     crtsh_set = set()
+
+    #TODO: ok, com certeza tem um jeito menos autista de fazer isso
 
     for dictionary in json_py:
         
@@ -110,6 +118,7 @@ def lista_final(list_of_addr):
     #printa a lista
     for addr in list_of_addr:
         print(Fore.YELLOW + Style.BRIGHT + addr,end="\n")
+        
 
 
 def print_arquivo(list_of_addr,args):
@@ -128,11 +137,18 @@ def sec_headers(args):
 
    #Just open the tab lol
    webbrowser.open_new("https://securityheaders.com/?q=hackoonspace.com&followRedirects=on$")
+   pass
+
 
 
 def main():
 
+    #performance time
+    start = time.perf_counter()
+
     args = create_parser()
+
+    print(args.Headers)
 
     #remove trequinhos desnecessários para fazer a request 
     args.domain = args.domain.replace("https://","")
@@ -156,13 +172,24 @@ def main():
     list_of_addr = unir_resultados(crtsh_set,sublister_set)
 
 
-
+    #Printa a lista
     lista_final(list_of_addr)
 
     if (args.output != None): print_arquivo(list_of_addr,args)
 
-    sec_headers(args)
+    #Se tiver o parãmetro pedindo pra n usar, don't
+    if(args.Headers != "n"):
+        #achados do Security Headers
+        print("\n"+Fore.GREEN + "[-] abrindo o scan no security headers")
+        sec_headers(args)
 
+
+    #performance time
+    finish = time.perf_counter()
+
+    print(Fore.YELLOW + Style.BRIGHT + f"\nVocê esteve aqui por {round(finish-start,2)} segundos, Obrigado por usar lazycrt!")
+
+    exit()
 
 #LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL
 
