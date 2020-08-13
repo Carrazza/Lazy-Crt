@@ -75,7 +75,7 @@ def sublist3r(args):
     sublister_set = set()
 
     #Pegando os domínios do sublister 
-    with open("sublister.txt","r") as f:
+    with open("/home/carrazza/hack/Scripts/lazycrt/sublister.txt","r") as f:
 
         for result in f.readlines():
             
