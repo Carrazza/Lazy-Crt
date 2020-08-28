@@ -160,7 +160,7 @@ def print_arquivo(list_of_addr,args):
 def sec_headers(args):
 
    #Just open the tab lol
-   webbrowser.open_new("https://securityheaders.com/?q="+args.domain+"&followRedirects=on$")
+   webbrowser.open("https://securityheaders.com/?q="+args.domain+"&followRedirects=on$")
    pass
 
 
@@ -174,7 +174,13 @@ def aquatone(list_of_addr,args):
     url = " ".join(list_of_addr)
 
 
-    os.system(f"mkdir {args.domain};echo {url} | aquatone -out ./{args.domain} >/dev/null")
+    comand = ""
+
+    if(args.agressive == True): comand = f"mkdir {args.domain};echo {url} | aquatone -ports xlarge -out ./{args.domain} >/dev/null"
+    else: comand = f"mkdir {args.domain};echo {url} | aquatone -ports xlarge -out ./{args.domain} >/dev/null"
+
+
+    os.system(comand)
 
     finish = time.perf_counter()
 
