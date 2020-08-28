@@ -6,6 +6,7 @@ import argparse
 import os
 import webbrowser
 import time
+from time import sleep
 
 import colorama
 from colorama import Fore, Back, Style
@@ -31,8 +32,8 @@ def create_parser():
     #argumento verbosidade
     parser.add_argument("-v","--verbosity",action='store_true', required=False,help="Informações a mais sobre o script enquanto ele roda")
 
-    #checar se os sites estão up
-    parser.add_argument("-p","--ping",action='store_true', required=False,help="pingar a lista de sites pra ver quais tão up")
+    #argumento port scan aquatone
+    parser.add_argument("-A","--agressive",action='store_true', required=False,help="Aquatone vai meter o louco nas portas")
 
     return parser.parse_args()
 
@@ -164,11 +165,20 @@ def sec_headers(args):
 
 
 
-def ping_check(list_of_addr):
+def aquatone(list_of_addr,args):
 
-    for url in list_of_addr:
-        get_checker = r.get("https://" + url)
-        print(f"url {url} teve resposta {get_checker.status_code}")
+    #tem que formatar pro aquatone, bugou quando n formatei então neh
+
+    start= time.perf_counter()
+
+    url = " ".join(list_of_addr)
+
+
+    os.system(f"mkdir {args.domain};echo {url} | aquatone -out ./{args.domain} >/dev/null")
+
+    finish = time.perf_counter()
+
+    if(args.verbosity == True):print(Fore.BLUE+ f"-> Aquatone demorou {round(finish-start,2)} segs")
 
     pass
 
@@ -207,17 +217,25 @@ def main():
     #unindo tudo
     list_of_addr = unir_resultados(crtsh_set,sublister_set)
 
+    #chamando o aquatone
+    print(Fore.GREEN+'[-] Pesquisando no Aquatone')
+    aquatone(list_of_addr,args)
 
     #Printa a lista
     lista_final(list_of_addr)
 
     if (args.output != None): print_arquivo(list_of_addr,args)
 
+    print(Fore.GREEN+"\n[-] Abrindo o report do aquatone")
 
-    if (args.ping == True): ping_check(list_of_addr)
+    sleep(2)
+
+    os.system(f"firefox ./{args.domain}/aquatone_report.html ")
+    
 
     #performance time
     finish = time.perf_counter()
+
 
     print(Fore.YELLOW + Style.BRIGHT + f"\nVocê esteve aqui por {round(finish-start,2)} segundos, Obrigado por usar lazycrt!")
 
