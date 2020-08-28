@@ -20,16 +20,19 @@ def create_parser():
     parser = argparse.ArgumentParser(description="Preguiça de acessar o crt.sh então eu criei isso pra pegar tudo de lá pra mim!")
 
     #argumento do domínio/link 
-    parser.add_argument("-d","--domain",type=str ,metavar=" ", required=True, help="Domínio que vamos dar uma olhada")
+    parser.add_argument("-d","--domain",type=str ,metavar="", required=True, help="Domínio que vamos dar uma olhada")
 
     #argumento de output 
-    parser.add_argument("-o","--output",type=str,metavar=" ",required=False , help="Manda o output para um arquivo cujo nome vem depois do -o")
+    parser.add_argument("-o","--output",type=str,metavar="",required=False , help="Manda o output para um arquivo cujo nome vem depois do -o")
 
     #argumento de security headers
-    parser.add_argument("-H","--Headers", action='store_true',required=False,help="y/n -> quer que abra o security headers?(por padrão ele não abre)")
+    parser.add_argument("-H","--Headers", action='store_true',required=False,help="Abre os security headers")
 
     #argumento verbosidade
-    parser.add_argument("-v","--verbosity",action='store_true', required=False,help="informações a mais sobre o script enquanto ele roda")
+    parser.add_argument("-v","--verbosity",action='store_true', required=False,help="Informações a mais sobre o script enquanto ele roda")
+
+    #checar se os sites estão up
+    parser.add_argument("-p","--ping",action='store_true', required=False,help="pingar a lista de sites pra ver quais tão up")
 
     return parser.parse_args()
 
@@ -92,7 +95,7 @@ def sublist3r(args):
     start = time.perf_counter()
 
 
-    sublister = "/home/carrazza/Desktop/hack/Scripts/Sublist3r/sublist3r.py -d " + args.domain + " -o ./sublister.txt > /dev/null"
+    sublister = "/home/carrazza/hack/Scripts/Sublist3r/sublist3r.py -d " + args.domain + " -o ./sublister.txt > /dev/null"
 
 
     os.system(sublister)
@@ -156,9 +159,18 @@ def print_arquivo(list_of_addr,args):
 def sec_headers(args):
 
    #Just open the tab lol
-   webbrowser.open_new("https://securityheaders.com/?q=hackoonspace.com&followRedirects=on$")
+   webbrowser.open_new("https://securityheaders.com/?q="+args.domain+"&followRedirects=on$")
    pass
 
+
+
+def ping_check(list_of_addr):
+
+    for url in list_of_addr:
+        get_checker = r.get("https://" + url)
+        print(f"url {url} teve resposta {get_checker.status_code}")
+
+    pass
 
 
 def main():
@@ -202,7 +214,7 @@ def main():
     if (args.output != None): print_arquivo(list_of_addr,args)
 
 
-
+    if (args.ping == True): ping_check(list_of_addr)
 
     #performance time
     finish = time.perf_counter()
