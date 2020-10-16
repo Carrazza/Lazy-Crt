@@ -57,15 +57,22 @@ def print_logo():
 
 
 
+
+
+
+
 def crtsh(args):
 
     start = time.perf_counter()
 
     #Gets the json response from crt.sh
     json_request = r.get("https://crt.sh/?q=%25."+args.domain+"&output=json")
+    
+    #json_request2 = r.get("https://crt.sh/?q="+ args.domain + ".%25" + "&output=json")
 
     #Transforms the response in valid json to be interpreted by python
     json_py = json.loads(json_request.text)
+  
 
     crtsh_set = set()
 
@@ -83,6 +90,7 @@ def crtsh(args):
             if addrs not in crtsh_set:
                 crtsh_set.add(addrs)
 
+
     finish = time.perf_counter()
 
 
@@ -95,7 +103,7 @@ def sublist3r(args):
 
     start = time.perf_counter()
 
-
+    
     sublister = "/home/carrazza/hack/Scripts/Sublist3r/sublist3r.py -d " + args.domain + " -o ./sublister.txt > /dev/null"
 
 
@@ -167,10 +175,11 @@ def sec_headers(args):
 
 def aquatone(list_of_addr,args):
 
-    #tem que formatar pro aquatone, bugou quando n formatei então neh
 
     start= time.perf_counter()
 
+
+    #unindo todos os diretórios pra mandar pro aquatone
     url = " ".join(list_of_addr)
 
 
