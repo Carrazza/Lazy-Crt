@@ -1,8 +1,0 @@
-www.hackoonspace.com
-autodiscover.hackoonspace.com
-cpanel.hackoonspace.com
-cpcalendars.hackoonspace.com
-cpcontacts.hackoonspace.com
-mail.hackoonspace.com
-webdisk.hackoonspace.com
-webmail.hackoonspace.com
