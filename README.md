@@ -10,6 +10,9 @@ Atualmente, contamos com três scanners e fontes <br>
 
 .Aquatone - ferramenta para tirar screenshot de todos os dominios + checagem de quais estão vivos <br>
 
-.Security headers - dar uma olhada nos headers das requisições HTTP 
+.Security headers - dar uma olhada nos headers das requisições HTTP <br>
+
+
+(deprecated!  Uma versão nova do lazycrt será lançada coda completamente em bash para melhorar a perfomance!)
 
 
