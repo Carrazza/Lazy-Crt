@@ -1,5 +1,6 @@
-# Lazy-Crt é uma ferramenta que simplifica o processo de recon de um site checando várias fontes e ferramentas para se obter a maior quantidade de informação possível: <br>
+# Lazy-Crt <br>
 
+Lazy-Crt é uma ferramenta que simplifica o processo de recon de um site checando várias fontes e ferramentas para se obter a maior quantidade de informação possível: <br>
 
 Atualmente, contamos com três scanners e fontes <br>
 
